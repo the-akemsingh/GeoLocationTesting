@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoLocation</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        let lastLatitude, lastLongitude;
+    
+        function updateMap(latitude, longitude) {
+            const map = document.getElementById('map');
+            map.innerHTML = '<iframe width="700" height="500" src="https://maps.google.com/maps?q=' + latitude + ',' + longitude + '&amp;z=15&amp;output=embed"></iframe>';
+        }
+    
+        const watchId = navigator.geolocation.watchPosition(position => {
+            const { latitude, longitude } = position.coords;
+            if (latitude !== lastLatitude || longitude !== lastLongitude) {
+                lastLatitude = latitude;
+                lastLongitude = longitude;
+                updateMap(latitude, longitude);
+            }
+        });
+    
+        setInterval(() => {
+            if (lastLatitude && lastLongitude) {
+                updateMap(lastLatitude, lastLongitude);
+            }
+        }, 10000);
+    
+        // Optional: If you want to stop watching the user's position at some point
+        // navigator.geolocation.clearWatch(watchId);
+    </script>
+    
+     <!-- <div id="map"></div>
+<script>
+    function updateMap(latitude, longitude) {
+        const map = document.getElementById('map');
+        map.innerHTML = '<iframe width="700" height="500" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=' + latitude + ',' + longitude + '" allowfullscreen></iframe>';
+    }
+
+    navigator.geolocation.watchPosition(position => {
+        const { latitude, longitude } = position.coords;
+        updateMap(latitude, longitude);
+    }, 
+    error => {
+        console.error("Error obtaining location: ", error);
+    },
+    {
+        enableHighAccuracy: true,
+        maximumAge: 3000,
+        timeout: 5000
+    });
+</script> -->
+
+    
+</body>
+
+</html>
